@@ -52,22 +52,33 @@ def startalert(percent,cid,update,context):
 
 @run_async   
 def start(update, context):
+    context.bot.send_chat_action(chat_id=update.message.chat_id , action=ChatAction.TYPING)
     get_chat = str(update.message.chat_id)
     new_dict = {}
     new_dict[get_chat] = 0
-    with open('check.json', 'r+') as file:
-        id_data = json.load(file)
-        id_data.update(new_dict)
-        file.seek(0)
-        json.dump(id_data,file)
-    context.bot.send_chat_action(chat_id=update.message.chat_id , action=ChatAction.TYPING)
-    context.bot.send_message(chat_id=update.message.chat_id, text="Welcome")
+    while True:
+        try:
+            with open('check.json', 'r+') as file:
+                id_data = json.load(file)
+                id_data.update(new_dict)
+                file.seek(0)
+                json.dump(id_data,file)
+            break
+        except:
+            pass
+    context.bot.send_message(chat_id=update.message.chat_id, text="Welcome!")
+    # return
 
 @run_async
 def crypto(update, context):
-    f = open('data.json', 'r')
-    content = f.read()
-    f.close()
+    while True:
+        try:
+            f = open('data.json', 'r')
+            content = f.read()
+            f.close()
+            break
+        except:
+            pass
     result = json.loads(content)
     symbol = update.message.text.split()[-1]
     context.bot.send_chat_action(chat_id=update.message.chat_id, action=ChatAction.TYPING)
@@ -75,12 +86,18 @@ def crypto(update, context):
     pd = ((greater - lower)/lower)*100
     msg = f"Binance : <b>{result[symbol]['Binance']} USDT</b>\nWazirx : <b>{result[symbol]['Wazirx']} USDT</b>\nDifference Percentage : <b>{round(pd,2)}%</b>"
     context.bot.send_message(chat_id=update.message.chat_id, text=msg, parse_mode = ParseMode.HTML)
+    return
 
 @run_async
 def prices(update, context):
-    f = open('data.json', 'r')
-    content = f.read()
-    f.close()
+    while True:
+        try:
+            f = open('data.json', 'r')
+            content = f.read()
+            f.close()
+            break
+        except:
+            pass
     result = json.loads(content)
     context.bot.send_chat_action(chat_id=update.message.chat_id, action=ChatAction.TYPING)
     pr=[]
@@ -95,12 +112,18 @@ def prices(update, context):
     sec = '\n'.join(second_half)
     context.bot.send_message(chat_id=update.message.chat_id, text=pri, parse_mode = ParseMode.HTML)
     context.bot.send_message(chat_id=update.message.chat_id, text=sec, parse_mode = ParseMode.HTML)
+    return
 
 @run_async
 def sortprices(update, context):
-    f = open('data.json', 'r')
-    content = f.read()
-    f.close()
+    while True:
+        try:
+            f = open('data.json', 'r')
+            content = f.read()
+            f.close()
+            break
+        except:
+            pass
     result = json.loads(content)
     context.bot.send_chat_action(chat_id=update.message.chat_id, action=ChatAction.TYPING)
     pr=[]
@@ -119,6 +142,7 @@ def sortprices(update, context):
     sec = '\n'.join(second_half)
     context.bot.send_message(chat_id=update.message.chat_id, text=pri, parse_mode = ParseMode.HTML)
     context.bot.send_message(chat_id=update.message.chat_id, text=sec, parse_mode = ParseMode.HTML)
+    return
 
 @run_async
 def alert(update, context):
@@ -155,11 +179,16 @@ def offalert(update, context):
     get_chat = str(update.message.chat_id)
     new_dict = {}
     new_dict[get_chat] = 0
-    with open('check.json', 'r+') as file:
-        id_data = json.load(file)
-        id_data.update(new_dict)
-        file.seek(0)
-        json.dump(id_data,file)
+    while True:
+        try:
+            with open('check.json', 'r+') as file:
+                id_data = json.load(file)
+                id_data.update(new_dict)
+                file.seek(0)
+                json.dump(id_data,file)
+            break
+        except:
+            pass
     context.bot.send_message(chat_id=update.message.chat_id, text='Turning off alert')
 
 
@@ -173,4 +202,5 @@ dp.add_handler(CommandHandler("alert", alert))
 dp.add_handler(CommandHandler("offalert", offalert))
 dp.add_handler(CommandHandler("sortprices", sortprices))
 
+print('starting')
 updater.start_polling()
